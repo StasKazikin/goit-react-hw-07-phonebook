@@ -1,20 +1,20 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
-import shortid from "shortid";
-import { form, label, input, button } from "./ContactForm.module.scss";
-import actions from "../../redux/contacts/contacts-actions";
-import { connect } from "react-redux";
+import { Component } from 'react';
+import PropTypes from 'prop-types';
+import shortid from 'shortid';
+import { form, label, input, button } from './ContactForm.module.scss';
+import { connect } from 'react-redux';
+import contactsOperations from '../../redux/contacts/contacts-operations';
 
 class ContactForm extends Component {
   state = {
-    name: "",
-    number: "",
+    name: '',
+    number: '',
   };
 
   nameInputId = shortid.generate();
   numberInputId = shortid.generate();
 
-  handleInput = (event) => {
+  handleInput = event => {
     const { name, value } = event.currentTarget;
     this.setState({
       [name]: value,
@@ -22,7 +22,7 @@ class ContactForm extends Component {
   };
 
   reset = () => {
-    this.setState({ name: "", number: "" });
+    this.setState({ name: '', number: '' });
   };
 
   sameContact = (contactName, contacts) => {
@@ -31,7 +31,7 @@ class ContactForm extends Component {
     });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
 
     const { name, number } = this.state;
@@ -43,12 +43,12 @@ class ContactForm extends Component {
       return;
     }
 
-    if (name !== "") {
-      this.props.onSubmit({ id: shortid.generate(), name, number });
+    if (name !== '') {
+      this.props.onSubmit({ name, number });
       this.reset();
       return;
     }
-    alert("Введите имя контакта");
+    alert('Введите имя контакта');
   };
 
   render() {
@@ -90,14 +90,14 @@ ContactForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     contacts: state.contacts,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (newContact) => dispatch(actions.addContact(newContact)),
+const mapDispatchToProps = dispatch => ({
+  onSubmit: newContact => dispatch(contactsOperations.addContact(newContact)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
