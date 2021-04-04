@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import { form, label, input, button } from './ContactForm.module.scss';
 import { connect } from 'react-redux';
-import contactsOperations from '../../redux/contacts/contacts-operations';
+import { contactsOperations, contactsSelectors } from '../../redux/contacts';
 
 class ContactForm extends Component {
   state = {
@@ -92,7 +92,7 @@ ContactForm.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    contacts: state.contacts,
+    contacts: contactsSelectors.getContacts(state),
   };
 };
 

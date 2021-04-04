@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { list, item, button } from './ContactList.module.scss';
-import contactsOperations from '../../redux/contacts/contacts-operations';
 import { connect } from 'react-redux';
+import { contactsOperations, contactsSelectors } from '../../redux/contacts';
 
 const ContactList = ({ contacts, deleteContact }) => {
   return (
@@ -27,19 +27,11 @@ const ContactList = ({ contacts, deleteContact }) => {
 
 ContactList.propTypes = {
   contacts: PropTypes.array.isRequired,
-  onClick: PropTypes.func.isRequired,
+  deleteContact: PropTypes.func.isRequired,
 };
 
-const filterContacts = (contacts, filter) => {
-  const normalizedFilter = filter.toLowerCase();
-
-  return contacts.filter(({ name }) =>
-    name.toLowerCase().includes(normalizedFilter),
-  );
-};
-
-const mapStateToProps = ({ contacts: { items, filter } }) => ({
-  contacts: filterContacts(items, filter),
+const mapStateToProps = state => ({
+  contacts: contactsSelectors.getFilteredContacts(state),
 });
 
 const mapDispatchToProps = dispatch => ({
